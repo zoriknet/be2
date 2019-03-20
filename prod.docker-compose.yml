@@ -1,0 +1,38 @@
+version: '2'
+services:
+  webserver:
+    image: phpstorm/php-71-apache-xdebug-26
+    ports:
+      - "80:80"
+    volumes:
+      - data-vol:/var/www/html
+    links:
+      - db
+      - prj
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - data-vol:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: roi4cio
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+
+  prj:
+    image: zoriknet/roi4cio
+    ports:
+      - "80:80"
+    volumes:
+      - data-vol:/var/www/html
+    links:
+      - db
+
+
+volumes:
+  data-vol:

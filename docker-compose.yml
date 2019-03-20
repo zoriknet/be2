@@ -1,0 +1,28 @@
+version: '2'
+services:
+  webserver:
+    image: phpstorm/php-71-apache-xdebug-26
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      XDEBUG_CONFIG: remote_host=host.docker.internal
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: roi4cio
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
